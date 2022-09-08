@@ -1,0 +1,14 @@
+[workspace]
+members = [
+    "fishfinder",
+    "fishgen",
+]
+
+# Enable only a small amount of optimization in debug mode
+[profile.dev]
+opt-level = 1
+
+# Enable high optimizations for dependencies:
+[profile.dev.package."*"]
+opt-level = 3
+

@@ -1,0 +1,13 @@
+[package]
+name = "fishgen"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+fastrand = "1.8.0"
+image = "0.24.3"
+imageproc = "0.23.0"
+lazy_static = "1.4.0"
+
