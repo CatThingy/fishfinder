@@ -1,5 +1,5 @@
 [package]
-name = "fishfinder"
+name = "fishviewer"
 version = "0.1.0"
 edition = "2021"
 
@@ -7,5 +7,5 @@ edition = "2021"
 
 [dependencies]
 druid = { version = "0.7.0", features = ["image"] }
-fishgen = { path = "../fishgen"}
+fishgen = { path = "../fishgen", features = ["druid"]}
 image = "0.24.3"
