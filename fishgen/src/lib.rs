@@ -1,3 +1,4 @@
+use druid::Data;
 use image::{
     imageops::{overlay, resize, FilterType},
     DynamicImage, ImageBuffer, Rgba,
@@ -13,7 +14,9 @@ const FISH_WIDTH: u32 = 289;
 const FISH_HEIGHT: u32 = 269;
 const MIN_SCALE: f32 = 0.1;
 
+#[derive(Data, Clone)]
 pub struct FishOutput {
+    #[data(ignore)]
     pub image: ImageBuffer<Rgba<u8>, Vec<u8>>,
     pub x: u32,
     pub y: u32,

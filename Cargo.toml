@@ -1,7 +1,8 @@
 [workspace]
 members = [
-    "fishfinder",
+    "fishviewer",
     "fishgen",
+    "fishfinder-nn"
 ]
 
 # Enable only a small amount of optimization in debug mode
