@@ -2,7 +2,7 @@
 members = [
     "fishviewer",
     "fishgen",
-    "fishfinder-nn"
+    "fishgen-py",
 ]
 
 # Enable only a small amount of optimization in debug mode

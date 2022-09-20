@@ -1,0 +1,16 @@
+[package]
+name = "fishgen-py"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "fishgen_py"
+crate-type = ["cdylib"]
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+ndarray = "0.15.6"
+numpy = "0.17.2"
+pyo3 = { version = "0.17.1", features = ["extension-module"] }
+fishgen = { path = "../fishgen" }
+
