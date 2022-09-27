@@ -45,6 +45,8 @@ impl Display for FishError {
 
 impl Error for FishError {}
 
+/// Generates a white image with the given width and height with a randomly
+/// rotated fish randomly scaled between `min_scale` and `max_scale`.
 pub fn random_fish(
     width: u32,
     height: u32,

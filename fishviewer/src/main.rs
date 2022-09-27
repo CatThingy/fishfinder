@@ -1,7 +1,7 @@
 use druid::{
     piet::InterpolationMode,
-    widget::{Button, Flex, Label},
-    AppLauncher, Color, RenderContext, Size, Widget, WidgetExt, WindowDesc,
+    widget::{Button, Flex},
+    AppLauncher, RenderContext, Size, Widget, WindowDesc,
 };
 use fishgen::{random_fish, FishOutput};
 
@@ -9,7 +9,7 @@ fn main() {
     let main_window = WindowDesc::new(build_root);
     AppLauncher::with_window(main_window)
         .use_simple_logger()
-        .launch(random_fish(1024, 1024))
+        .launch(random_fish(1024, 1024,  0.1,  1.0).unwrap())
         .unwrap();
 }
 
@@ -78,7 +78,7 @@ fn build_root() -> impl Widget<FishOutput> {
         .with_flex_child(
             Flex::column().with_flex_child(
                 Button::new("Next fish").on_click(|_, data: &mut FishOutput, _| {
-                    *data = random_fish(1024, 1024);
+                    *data = random_fish(1024, 1024, 0.1, 1.0).unwrap();
                 }),
                 // Label::new("top left")
                 //     .center()

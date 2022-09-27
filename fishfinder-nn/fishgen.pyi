@@ -44,6 +44,6 @@ class fish_output:
     def fish_height(self) -> float:
         """
         The height of the fish.
-        This value is in relative coordinates, where 1.0 is the full width of the image.
+        This value is in relative coordinates, where 1.0 is the full height of the image.
         """
         ...

@@ -50,9 +50,6 @@ impl From<fishgen_rs::FishOutput> for PyFishOutput {
 
 #[pyfunction]
 #[pyo3(text_signature = "(height, width, min_scale, max_scale, /)")]
-/// Generate an image with the given size with a randomly rotated fish randomly scaled with the
-/// provided range..
-///
 pub fn random_fish(height: u32, width: u32, min_scale: f32, max_scale: f32) -> PyResult<PyFishOutput> {
     let fish = fishgen_rs::random_fish(width, height, min_scale, max_scale);
     let fish = match fish {
