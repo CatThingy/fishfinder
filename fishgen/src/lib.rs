@@ -31,15 +31,20 @@ pub struct FishOutput {
 #[derive(Debug)]
 #[non_exhaustive]
 pub enum FishError {
-    FishTooBig,
+    FishTooBig { max_supported_scale: f32 },
 }
 impl Display for FishError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let error_message = match &self {
-            FishError::FishTooBig => "Random fish can be too large",
-        };
-
-        write!(f, "{}", error_message)
+        match &self {
+            FishError::FishTooBig {
+                max_supported_scale,
+            } => {
+                return write!(
+                    f,
+                    "Generated fish can exceed the bounds of the image. Maximum scale for this size is {max_supported_scale}"
+                );
+            }
+        }
     }
 }
 
@@ -53,14 +58,21 @@ pub fn random_fish(
     min_scale: f32,
     max_scale: f32,
 ) -> Result<FishOutput, FishError> {
+    if (width as f32) < FISH_WIDTH as f32 * max_scale
+        || (height as f32) < FISH_HEIGHT as f32 * max_scale
+    {
+        return Err(FishError::FishTooBig {
+            max_supported_scale: f32::min(
+                width as f32 / FISH_WIDTH as f32,
+                height as f32 / FISH_HEIGHT as f32,
+            ),
+        });
+    }
+
     let scale = fastrand::f32() * (max_scale - min_scale) + min_scale;
 
     let fish_width = (FISH_WIDTH as f32 * scale) as u32;
     let fish_height = (FISH_HEIGHT as f32 * scale) as u32;
-
-    if fish_height > height || fish_width > width {
-        return Err(FishError::FishTooBig);
-    }
 
     let fish = rotate_about_center(
         &(FISH.clone().to_rgba8()),

@@ -9,7 +9,7 @@ fn main() {
     let main_window = WindowDesc::new(build_root);
     AppLauncher::with_window(main_window)
         .use_simple_logger()
-        .launch(random_fish(1024, 1024,  0.1,  1.0).unwrap())
+        .launch(random_fish(1024, 1024, 0.1, 1.0).unwrap())
         .unwrap();
 }
 
@@ -61,7 +61,7 @@ impl Widget<FishOutput> for FishDisplay {
                 1024,
                 1024,
                 data.image.as_raw(),
-                druid::piet::ImageFormat::RgbaSeparate,
+                druid::piet::ImageFormat::Rgb,
             )
             .unwrap();
 
