@@ -48,6 +48,46 @@ impl From<fishgen_rs::FishOutput> for PyFishOutput {
     }
 }
 
+impl From<fishgen_rs::FishOutput> for PyImageOutput {
+    fn from(fish: fishgen_rs::FishOutput) -> Self {
+        let raw_bytes = fish.image.as_raw().iter().map(|v| *v as f32 / 255.0).collect();
+        let width = fish.image.width() as usize;
+        let height = fish.image.height() as usize;
+        let new = Array::from_shape_vec((width, height, 3), raw_bytes).unwrap();
+
+        PyImageOutput {
+            image: new.into(),
+            x: fish.x as f32 / width as f32,
+            y: fish.y as f32 / height as f32,
+            width: fish.width as f32 / width as f32,
+            height: fish.height as f32 / height as f32,
+        }
+    }
+}
+
+#[pyclass(name = "image_output")]
+pub struct PyImageOutput {
+    pub image: Array3<f32>,
+    #[pyo3(get)]
+    pub x: f32,
+    #[pyo3(get)]
+    pub y: f32,
+    #[pyo3(get)]
+    pub width: f32,
+    #[pyo3(get)]
+    pub height: f32,
+}
+#[pymethods]
+impl PyImageOutput {
+    #[getter]
+    pub fn image<'py, 'b>(&self, m: Python<'py>) -> PyResult<&'b numpy::PyArray3<f32>>
+    where
+        'py: 'b,
+    {
+        Ok(self.image.to_pyarray(m))
+    }
+}
+
 #[pyfunction]
 #[pyo3(text_signature = "(height, width, min_scale, max_scale, /)")]
 pub fn random_fish(height: u32, width: u32, min_scale: f32, max_scale: f32) -> PyResult<PyFishOutput> {
@@ -59,9 +99,46 @@ pub fn random_fish(height: u32, width: u32, min_scale: f32, max_scale: f32) -> P
     Ok(fish.into())
 }
 
+#[pyfunction]
+#[pyo3(text_signature = "(height, width, min_scale, max_scale, /)")]
+pub fn random_box(height: u32, width: u32, min_scale: f32, max_scale: f32) -> PyResult<PyImageOutput> {
+    let fish = fishgen_rs::random_box(width, height, min_scale, max_scale);
+    let fish = match fish {
+        Ok(v) => v,
+        Err(e) => return Err(PyRuntimeError::new_err(format!("{e}"))),
+    };
+    Ok(fish.into())
+}
+
+#[pyfunction]
+#[pyo3(text_signature = "(height, width, min_scale, max_scale, /)")]
+pub fn random_squiggle(height: u32, width: u32, min_scale: f32, max_scale: f32) -> PyResult<PyImageOutput> {
+    let fish = fishgen_rs::random_squiggle(width, height, min_scale, max_scale);
+    let fish = match fish {
+        Ok(v) => v,
+        Err(e) => return Err(PyRuntimeError::new_err(format!("{e}"))),
+    };
+    Ok(fish.into())
+}
+
+#[pyfunction]
+#[pyo3(text_signature = "(height, width, min_scale, max_scale, /)")]
+pub fn random_decoy_fish(height: u32, width: u32, min_scale: f32, max_scale: f32) -> PyResult<PyImageOutput> {
+    let fish = fishgen_rs::random_decoy_fish(width, height, min_scale, max_scale);
+    let fish = match fish {
+        Ok(v) => v,
+        Err(e) => return Err(PyRuntimeError::new_err(format!("{e}"))),
+    };
+    Ok(fish.into())
+}
+
 #[pymodule]
 fn fishgen(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
     m.add_class::<PyFishOutput>()?;
+    m.add_class::<PyImageOutput>()?;
     m.add_function(wrap_pyfunction!(random_fish, m)?)?;
+    m.add_function(wrap_pyfunction!(random_box, m)?)?;
+    m.add_function(wrap_pyfunction!(random_squiggle, m)?)?;
+    m.add_function(wrap_pyfunction!(random_decoy_fish, m)?)?;
     Ok(())
 }
